@@ -37,8 +37,8 @@ func NewCoin() (*Coin, error) {
 	return coin, nil
 }
 
-// Monitor monitor coin instance
-func (coin *Coin) Monitor(gauge prometheus.Gauge) {
+// MonitorCount monitor coin current block count
+func (coin *Coin) MonitorCount(gauge prometheus.Gauge) {
 	count, err := coin.client.GetBlockCount()
 	if err != nil {
 		log.Print(err)
@@ -48,4 +48,17 @@ func (coin *Coin) Monitor(gauge prometheus.Gauge) {
 	gauge.Set(float64(count))
 	log.Print("monitoring...")
 	time.Sleep(10 * time.Minute)
+}
+
+// MonitorStatus monitor node state
+func (coin *Coin) MonitorStatus(summary *prometheus.SummaryVec) {
+	labels := prometheus.Labels{"status": "success"}
+
+	err := coin.client.Ping()
+	if err != nil {
+		labels = prometheus.Labels{"status": "fail"}
+	}
+
+	summary.With(labels)
+	time.Sleep(1 * time.Minute)
 }
