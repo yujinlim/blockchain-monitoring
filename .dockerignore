@@ -27,3 +27,10 @@ prometheus-coin-monitoring
 .vagrant/
 
 # End of https://www.gitignore.io/api/vagrant
+
+.git/
+Dockerfile
+Vagrantfile
+.editorconfig
+.gitignore
+readme.md
