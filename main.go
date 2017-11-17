@@ -5,22 +5,33 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/yujinlim/prometheus-coin-monitoring/coin"
 )
 
+// parse cli
 func main() {
+	var client coin.Coin
+	var err error
+
 	log.Println("starting...")
 	// load env
-	err := godotenv.Load()
+	err = godotenv.Load()
 	if err != nil {
 		// ignore err
 		log.Println(err)
 	}
 
+	coinType := os.Getenv("COIN_TYPE")
 	port := os.Getenv("PORT")
 	namespace := os.Getenv("COIN_NAMESPACE")
+	host := os.Getenv("COIN_HOST")
+	username := os.Getenv("COIN_USER")
+	password := os.Getenv("COIN_PASSWORD")
+
 	if len(namespace) == 0 {
 		namespace = "coin"
 	}
@@ -30,40 +41,65 @@ func main() {
 	}
 	addr := strings.Join([]string{":", port}, "")
 
-	coin, err := NewCoin()
+	if coinType == "ethereum" {
+		client, err = coin.NewEthCoin(host)
+	} else {
+		client, err = coin.NewBitcoinCoin(host, username, password, coin.Type(coinType))
+	}
+
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
 	}
-	log.Print("creating...")
 
+	log.Print("creating...")
+	start(client, namespace, addr)
+}
+
+// start setup prometheus and http
+func start(coin coin.Coin, namespace string, addr string) {
 	blockCounter := prometheus.NewGauge(prometheus.GaugeOpts{
 		Namespace: namespace,
 		Name:      "block_total",
 		Help:      "Total block count for current node",
 	})
 
-	stateSummary := prometheus.NewSummaryVec(prometheus.SummaryOpts{
+	statusCounter := prometheus.NewGauge(prometheus.GaugeOpts{
 		Namespace: namespace,
 		Name:      "status",
-		Help:      "status of coin node",
-	}, []string{"status"})
+		Help:      "Status of coin node",
+	})
 
-	prometheus.MustRegister(blockCounter)
-	prometheus.MustRegister(stateSummary)
+	diffCounter := prometheus.NewGauge(prometheus.GaugeOpts{
+		Namespace: namespace,
+		Name:      "block_differences",
+		Help:      "Block differences between current node and other api service",
+	})
+
+	prometheus.MustRegister(blockCounter, statusCounter, diffCounter)
 
 	// spin go routine
 	// monitor block counter
 	go func() {
 		for {
 			coin.MonitorCount(blockCounter)
+			time.Sleep(30 * time.Second)
 		}
 	}()
 
 	// monitor node state
 	go func() {
 		for {
-			coin.MonitorStatus(stateSummary)
+			coin.MonitorStatus(statusCounter)
+			time.Sleep(30 * time.Second)
+		}
+	}()
+
+	// monitor block differences
+	go func() {
+		for {
+			coin.MonitorDifferences(diffCounter)
+			time.Sleep(30 * time.Second)
 		}
 	}()
 
