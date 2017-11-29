@@ -9,7 +9,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/yujinlim/prometheus-coin-monitoring/coin"
+	"github.com/yujinlim/blockchain-monitoring/coin"
 )
 
 // parse cli
