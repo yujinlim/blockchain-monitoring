@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/yujinlim/prometheus-coin-monitoring/coin"
+	"github.com/yujinlim/blockchain-monitoring/coin"
 )
 
 // prometheusHandler wrapper around prometheus http
