@@ -8,10 +8,15 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+//EthSyncResponse ethereum sync response body
+type EthSyncResponse struct {
+	Current string `json:"currentBlock"`
+	Highest string `json:"highestBlock"`
+}
+
 // EthCoin eth coin client instance
 type EthCoin struct {
-	client  *rpc.Client
-	compare func(int64) (float64, error)
+	client *rpc.Client
 }
 
 // NewEthCoin get new eth coin client
@@ -22,8 +27,7 @@ func NewEthCoin(url string, network NetworkType) (*EthCoin, error) {
 	}
 
 	return &EthCoin{
-		client:  client,
-		compare: NewCompare(EthereumType, network),
+		client: client,
 	}, nil
 }
 
@@ -76,15 +80,22 @@ func (coin *EthCoin) Ping() error {
 
 // MonitorDifferences monitor differences between current node and other api service
 func (coin *EthCoin) MonitorDifferences(gauge prometheus.Gauge) {
-	blockCount, err := coin.getBlockCount()
+	var ethSyncResponse EthSyncResponse
+	err := coin.client.Call(&ethSyncResponse, "eth_syncing")
 	if err != nil {
 		log.Panic(err)
 	}
 
-	diff, err := coin.compare(blockCount)
+	current, err := strconv.ParseInt(ethSyncResponse.Current, 0, 64)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	gauge.Set(diff)
+	latest, err := strconv.ParseInt(ethSyncResponse.Highest, 0, 64)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	diff := latest - current
+	gauge.Set(float64(diff))
 }

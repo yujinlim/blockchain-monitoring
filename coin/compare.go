@@ -33,9 +33,10 @@ func NewCompare(coinType Type, network NetworkType) func(int64) (float64, error)
 
 		return compare
 	} else if coinType == EthereumType && network == Testnet {
+		// might remove this
 		return compareRopstenEthBlockCount
 	}
-
+	// might remove this
 	return compareEthBlockCount
 }
 
