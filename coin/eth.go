@@ -83,7 +83,8 @@ func (coin *EthCoin) MonitorDifferences(gauge prometheus.Gauge) {
 	var ethSyncResponse EthSyncResponse
 	err := coin.client.Call(&ethSyncResponse, "eth_syncing")
 	if err != nil {
-		log.Panic(err)
+		log.Println(err)
+		return
 	}
 
 	current, err := strconv.ParseInt(ethSyncResponse.Current, 0, 64)
