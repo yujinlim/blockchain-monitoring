@@ -14,7 +14,9 @@ func NewBlockCypherClient(coinType Type, network NetworkType) *gobcy.API {
 		bc.Coin = "ltc"
 	}
 
-	bc.Chain = string(network)
+	if network == Testnet {
+		bc.Chain = "test3"
+	}
 
 	return &bc
 }
