@@ -31,6 +31,7 @@ func main() {
 	host := os.Getenv("COIN_HOST")
 	username := os.Getenv("COIN_USER")
 	password := os.Getenv("COIN_PASSWORD")
+	network := os.Getenv("COIN_NETWORK")
 
 	if len(namespace) == 0 {
 		namespace = "coin"
@@ -42,9 +43,9 @@ func main() {
 	addr := strings.Join([]string{":", port}, "")
 
 	if coinType == "ethereum" {
-		client, err = coin.NewEthCoin(host)
+		client, err = coin.NewEthCoin(host, coin.NetworkType(network))
 	} else {
-		client, err = coin.NewBitcoinCoin(host, username, password, coin.Type(coinType))
+		client, err = coin.NewBitcoinCoin(host, username, password, coin.Type(coinType), coin.NetworkType(network))
 	}
 
 	if err != nil {

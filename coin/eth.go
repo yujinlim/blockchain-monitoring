@@ -11,10 +11,11 @@ import (
 // EthCoin eth coin client instance
 type EthCoin struct {
 	client *rpc.Client
+	// compare func(int64) (float64, error)
 }
 
 // NewEthCoin get new eth coin client
-func NewEthCoin(url string) (*EthCoin, error) {
+func NewEthCoin(url string, network NetworkType) (*EthCoin, error) {
 	client, err := rpc.Dial(url)
 	if err != nil {
 		log.Panic(err)
@@ -22,6 +23,7 @@ func NewEthCoin(url string) (*EthCoin, error) {
 
 	return &EthCoin{
 		client: client,
+		// compare: NewCompare(EthereumType, network),
 	}, nil
 }
 

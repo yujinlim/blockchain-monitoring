@@ -8,6 +8,12 @@
   revision = "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9"
 
 [[projects]]
+  name = "github.com/blockcypher/gobcy"
+  packages = ["."]
+  revision = "6eace16b4b81ea8dbdcde5417d6b1cc3828a3d1f"
+  version = "v1.3.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/btcsuite/btcd"
   packages = ["btcec","btcjson","chaincfg","chaincfg/chainhash","wire"]
@@ -128,6 +134,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "76b0686b57aa2fde641217b76c9dc2bb6c295a0513b52ef208a8275db5e7c4e9"
+  inputs-digest = "42b202da2bb13df87d3b0a2973b7b9c11d6099d6626d608e453ccd03aa2813cd"
   solver-name = "gps-cdcl"
   solver-version = 1

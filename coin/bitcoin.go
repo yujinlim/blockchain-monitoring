@@ -14,7 +14,7 @@ type Bitcoin struct {
 }
 
 // NewBitcoinCoin Create new bitcoin compatible instance
-func NewBitcoinCoin(host string, username string, password string, coinType Type) (*Bitcoin, error) {
+func NewBitcoinCoin(host string, username string, password string, coinType Type, network NetworkType) (*Bitcoin, error) {
 	connCfg := &btcrpcclient.ConnConfig{
 		Host:         host,
 		User:         username,
@@ -30,11 +30,8 @@ func NewBitcoinCoin(host string, username string, password string, coinType Type
 	}
 
 	coin := &Bitcoin{
-		client: client,
-	}
-
-	if coinType == DogecoinType {
-		coin.compare = compareDogecoinBlockCount
+		client:  client,
+		compare: NewCompare(coinType, network),
 	}
 
 	return coin, nil
