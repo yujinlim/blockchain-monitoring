@@ -10,8 +10,8 @@ import (
 
 // EthCoin eth coin client instance
 type EthCoin struct {
-	client *rpc.Client
-	// compare func(int64) (float64, error)
+	client  *rpc.Client
+	compare func(int64) (float64, error)
 }
 
 // NewEthCoin get new eth coin client
@@ -22,8 +22,8 @@ func NewEthCoin(url string, network NetworkType) (*EthCoin, error) {
 	}
 
 	return &EthCoin{
-		client: client,
-		// compare: NewCompare(EthereumType, network),
+		client:  client,
+		compare: NewCompare(EthereumType, network),
 	}, nil
 }
 
@@ -81,7 +81,7 @@ func (coin *EthCoin) MonitorDifferences(gauge prometheus.Gauge) {
 		log.Panic(err)
 	}
 
-	diff, err := compareEthBlockCount(blockCount)
+	diff, err := coin.compare(blockCount)
 	if err != nil {
 		log.Panic(err)
 	}
