@@ -8,6 +8,12 @@
   revision = "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9"
 
 [[projects]]
+  name = "github.com/blockcypher/gobcy"
+  packages = ["."]
+  revision = "6eace16b4b81ea8dbdcde5417d6b1cc3828a3d1f"
+  version = "v1.3.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/btcsuite/btcd"
   packages = ["btcec","btcjson","chaincfg","chaincfg/chainhash","wire"]
@@ -40,6 +46,18 @@
   name = "github.com/btcsuite/websocket"
   packages = ["."]
   revision = "31079b6807923eb23992c421b114992b95131b55"
+
+[[projects]]
+  name = "github.com/ethereum/go-ethereum"
+  packages = ["common/hexutil","log","rpc"]
+  revision = "1db4ecdc0b9e828ff65777fb466fc7c1d04e0de9"
+  version = "v1.7.2"
+
+[[projects]]
+  name = "github.com/go-stack/stack"
+  packages = ["."]
+  revision = "259ab82a6cad3992b4e21ff5cac294ccb06474bc"
+  version = "v1.7.0"
 
 [[projects]]
   branch = "master"
@@ -84,14 +102,38 @@
   revision = "e645f4e5aaa8506fc71d6edbc5c4ff02c04c46f2"
 
 [[projects]]
+  name = "github.com/rs/cors"
+  packages = ["."]
+  revision = "7af7a1e09ba336d2ea14b1ce73bf693c6837dbf6"
+  version = "v1.2"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ripemd160"]
   revision = "b176d7def5d71bdd214203491f89843ed217f420"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["websocket"]
+  revision = "9dfe39835686865bff950a07b394c12a98ddc811"
+
+[[projects]]
+  name = "gopkg.in/fatih/set.v0"
+  packages = ["."]
+  revision = "57907de300222151a123d29255ed17f5ed43fad3"
+  version = "v0.1.0"
+
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/natefinch/npipe.v2"
+  packages = ["."]
+  revision = "c1b8fa8bdccecb0b8db834ee0b92fdbcfa606dd6"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1c0b98c7aebd149c0b7093c674d54d9e0f3f158c452ef543f259dafe5db35d8f"
+  inputs-digest = "42b202da2bb13df87d3b0a2973b7b9c11d6099d6626d608e453ccd03aa2813cd"
   solver-name = "gps-cdcl"
   solver-version = 1
